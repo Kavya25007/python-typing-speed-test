@@ -59,5 +59,5 @@ This project was developed to learn:
 
 ## 👩‍💻 Author
 
-Kavya  
+Kavya Kushwaha
 First Year B.Tech (AI & ML)
