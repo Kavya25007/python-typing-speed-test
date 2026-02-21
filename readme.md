@@ -50,8 +50,6 @@ This project was developed to learn:
 
 ## 📸 Preview
 
-## 📸 Preview
-
 ![Typing Speed Test](screenshot.png)
 
 ---
