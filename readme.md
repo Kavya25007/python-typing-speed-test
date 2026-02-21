@@ -50,8 +50,11 @@ This project was developed to learn:
 
 ## 📸 Preview
 
-![Typing Speed Test](screenshot.png)
+### Main UI
+![Typing Speed Test Main UI](screenshot_main.png)
 
+### Result Screen
+![Typing Speed Test Result](screenshot_result.png)
 ---
 
 ## 👩‍💻 Author
