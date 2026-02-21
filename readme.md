@@ -60,4 +60,4 @@ This project was developed to learn:
 ## 👩‍💻 Author
 
 Kavya Kushwaha
-First Year B.Tech (AI & ML)
+First Year B.Tech CSE (AI & ML)
