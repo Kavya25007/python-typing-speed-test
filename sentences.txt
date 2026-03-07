@@ -1,0 +1,4 @@
+text_samples = [
+    "Practicing typing speed helps us complete our work faster",
+    "daily practice helps to improve typing speed",
+    "Practicing typing also improves typing accuracy"]
