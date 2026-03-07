@@ -1,66 +1,66 @@
 # ---------------------------------------
-# Project: Python Typing Speed Test
-# Created by: Kavya
-# Year: 1st Year B.Tech (AI & ML)
+# Mini Project: Python Typing Speed Analyzer
+# Developer: Kavya
+# Course: B.Tech CSE (AI&ML)- First Year
 # ---------------------------------------
 
-import tkinter as tk
-import random
-import time
+import tkinter as tk #GUI library
+import random # for random sentence
+import time # timer function
 
-start_time = 0
+timer_start = 0
 
-sentences = [
-    "python programming improves logical thinking",
-    "practice daily to increase typing speed",
-    "artificial intelligence is the future of technology"
+text_samples = [
+    "learning python helps improve logical thinking",
+    "daily practice helps to improve typing speed",
+    "artificial intelligence will shape future technology"
 ]
 
-# -------- Functions --------
+# --------  Main Functions --------
 
-def start_test():
-    global start_time
-    result_label.config(text="")
-    user_entry.delete(0, tk.END)
-    sentence = random.choice(sentences)
-    sentence_label.config(text=sentence)
-    start_time = time.time()
+def begin_test():
+    global timer_start
+    result_label.config(text= "")
+    user_entry.delete(0, tk.END) # clear input
+    selected_text = random.choice(text_samples)
+    sentence_label.config(text = selected_text)
+    timer_start = time.perf_counter()
 
-def check_result():
-    global start_time
+def calculate_result():
+    global timer_start
 
-    if start_time == 0:
-        result_label.config(text="Click Start First!")
+    if timer_start == 0:
+        result_label.config(text="Please start the test first!")
         return
 
-    end_time = time.time()
-    total_time = end_time - start_time
+    finish_time = time.perf_counter(
+    elapsed_time = finish_time - timer_start
 
-    typed = user_entry.get()
-    original = sentence_label.cget("text")
+    user_text = user_entry.get()
+    original_text = sentence_label.cget("text")
 
-    words = len(typed.split())
-    minutes = total_time / 60
-    wpm = words / minutes if minutes > 0 else 0
+    word_count = len(user_text.split())
+    minutes = elapsed_time / 60
+    wpm = word_count / minutes if minutes > 0 else 0
 
-    correct = 0
-    original_words = original.split()
-    typed_words = typed.split()
+    correct_words = 0
+    original_words = original_text.split()
+    typed_words = user_text.split()
 
-    for i in range(len(original_words)):
-        if i < len(typed_words) and original_words[i] == typed_words[i]:
-            correct += 1
+    for index in range(len(original_words)):
+        if index < len(typed_words) and original_words[index] == typed_words[index]:
+            correct_words += 1
 
-    accuracy = (correct / len(original_words)) * 100
+    accuracy = (correct_words / len(original_words)) * 100
 
     result_label.config(
-        text=f"WPM: {round(wpm,2)}   Accuracy: {round(accuracy,2)}%   Time: {round(total_time,2)} sec"
+        text=f"Speed: {round(wpm,2)}   Accuracy: {round(accuracy,2)}%   Duration: {round(elapsed_time,2)} sec"
     )
 
 # -------- GUI --------
 
 root = tk.Tk()
-root.title("Typing Speed Test - Premium UI")
+root.title("Python Typing Speed Tester")
 root.geometry("800x500")
 root.resizable(False, False)
 
@@ -115,7 +115,7 @@ button_frame.pack(pady=15)
 
 start_btn = tk.Button(button_frame,
                       text="Start",
-                      command=start_test,
+                      command = begin_test,
                       bg="#00c853",
                       fg="white",
                       width=10,
@@ -124,7 +124,7 @@ start_btn.grid(row=0, column=0, padx=15)
 
 check_btn = tk.Button(button_frame,
                       text="Check",
-                      command=check_result,
+                      command = calculate_result,
                       bg="#2962ff",
                       fg="white",
                       width=10,
