@@ -1,17 +1,16 @@
 # ---------------------------------------
 # Mini Project: Python Typing Speed Analyzer
-# Developer: Kavya
+# Developed by: Kavya
 # Course: B.Tech CSE (AI&ML)- First Year
 # ---------------------------------------
 
-import tkinter as tk #GUI library
+import tkinter as tk  # library for creating GUI
 import random # for random sentence
 import time # timer function
 
 timer_start = 0
-file = open("sentences.txt")
-text_samples = file.readlines()
-file.close()
+with open("sentences.txt") as file:
+    text_samples = file.readlines()
 
 
 # --------  Main Functions --------
@@ -40,23 +39,27 @@ def calculate_result():
 
     characters = len(user_text)
     minutes = elapsed_time / 60
-    wpm = (characters / 5) / minutes
+    if minutes > 0:
+        wpm = (characters / 5) / minutes
+    else:
+        wpm = 0
+    
 
     correct_words = 0
     original_words = original_text.split()
     typed_words = user_text.split()
 
     for word1 , word2 in zip(original_words , typed_words):
+    if word1 == word2:
+        correct_words += 1
 
     if len(original_words) > 0:
-    accuracy = ...
-else:
-    accuracy = 0
+        accuracy = (correct_words / len(original_words)) * 100
+    else:
+        accuracy = 0
 
     result_label.config(
-        text=f"Speed: {Typing Speed : ___ WPM
-                       Accuracy Level : ___ %
-                       Time Taken : ___ seconds} sec"
+        text=f"Typing Speed: {wpm:.2f} WPM\nAccuracy Level: {accuracy:.2f}%\nTime Taken: {elapsed_time:.2f} seconds"
     )
 
 # -------- GUI --------
