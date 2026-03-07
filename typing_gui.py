@@ -9,9 +9,10 @@ import random # for random sentence
 import time # timer function
 
 timer_start = 0
+file = open("sentences.txt")
+text_samples = file.readlines()
+file.close()
 
-
-]
 
 # --------  Main Functions --------
 
@@ -19,9 +20,10 @@ def begin_test():
     global timer_start
     result_label.config(text= "")
     user_entry.delete(0, tk.END) # clear input
-    selected_text = random.choice(text_samples)
+    selected_text = random.choice(text_samples).strip()
     sentence_label.config(text = selected_text)
     timer_start = time.perf_counter()
+    user_entry.focus()
 
 def calculate_result():
     global timer_start
@@ -44,14 +46,17 @@ def calculate_result():
     original_words = original_text.split()
     typed_words = user_text.split()
 
-    for index in range(len(original_words)):
-        if index < len(typed_words) and original_words[index] == typed_words[index]:
-            correct_words += 1
+    for word1 , word2 in zip(original_words , typed_words):
 
-    accuracy = (correct_words / len(original_words)) * 100
+    if len(original_words) > 0:
+    accuracy = ...
+else:
+    accuracy = 0
 
     result_label.config(
-        text=f"Speed: {round(wpm,2)}   Accuracy: {round(accuracy,2)}%   Duration: {round(elapsed_time,2)} sec"
+        text=f"Speed: {Typing Speed : ___ WPM
+                       Accuracy Level : ___ %
+                       Time Taken : ___ seconds} sec"
     )
 
 # -------- GUI --------
@@ -83,7 +88,7 @@ title = tk.Label(card, text="Typing Speed Test",
                  bg="#1e1e2f", fg="cyan")
 title.pack(pady=10)
 
-credit = tk.Label(card, text="Developed by Kavya",
+credit = tk.Label(card, text="Project Created by Kavya | AI & ML",
                   font=("Arial", 10),
                   bg="#1e1e2f", fg="lightgrey")
 credit.pack()
