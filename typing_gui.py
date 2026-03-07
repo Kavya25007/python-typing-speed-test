@@ -10,10 +10,7 @@ import time # timer function
 
 timer_start = 0
 
-text_samples = [
-    "learning python helps improve logical thinking",
-    "daily practice helps to improve typing speed",
-    "artificial intelligence will shape future technology"
+
 ]
 
 # --------  Main Functions --------
