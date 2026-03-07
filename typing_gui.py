@@ -38,9 +38,9 @@ def calculate_result():
     user_text = user_entry.get()
     original_text = sentence_label.cget("text")
 
-    word_count = len(user_text.split())
+    characters = len(user_text)
     minutes = elapsed_time / 60
-    wpm = word_count / minutes if minutes > 0 else 0
+    wpm = (characters / 5) / minutes
 
     correct_words = 0
     original_words = original_text.split()
