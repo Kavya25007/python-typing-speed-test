@@ -7,6 +7,9 @@ It computes:
 - ✅ Typing Accuracy
 - ✅ Time Taken
 
+# Live Demo
+![Live Demo](https://kavya25007.github.io/python-typing-speed-test/)
+
 ---
 
 ## 🚀 Features
