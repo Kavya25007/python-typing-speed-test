@@ -1,1 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeForge — Typing Speed Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!--
+    Fonts:
+    - "Bebas Neue" → brand / display headings (condensed, bold)
+    - "IBM Plex Mono" → typing text, stats (authentic terminal feel)
+    - "Figtree" → UI labels, controls (clean geometric sans)
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
+  <!-- ═══════════════ BACKGROUND ═══════════════ -->
+  <!-- Subtle scanline + grain overlay for texture -->
+  <div class="bg-texture" aria-hidden="true"></div>
+  <!-- Ambient glow blobs -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient-blob ambient-blob--1"></div>
+    <div class="ambient-blob ambient-blob--2"></div>
+  </div>
+
+  <!-- ═══════════════ WRAPPER ═══════════════ -->
+  <div class="app-wrapper">
+
+    <!-- ── HEADER ── -->
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true">⌨</span>
+        <h1 class="brand-name">Type<em>Forge</em></h1>
+      </div>
+      <p class="brand-tagline">sharpen your keystrokes</p>
+    </header>
+
+    <!-- ── CONTROLS BAR ── -->
+    <nav class="controls-bar" aria-label="Test controls">
+
+      <!-- Timer mode selector -->
+      <div class="control-group" role="group" aria-label="Timer duration">
+        <span class="control-label">timer</span>
+        <div class="mode-btns">
+          <button class="mode-btn" data-mode="30"  aria-pressed="false">30s</button>
+          <button class="mode-btn active" data-mode="60"  aria-pressed="true">60s</button>
+          <button class="mode-btn" data-mode="120" aria-pressed="false">120s</button>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div class="control-sep" aria-hidden="true"></div>
+
+      <!-- Action buttons -->
+      <div class="control-group">
+        <button class="icon-btn" id="refreshBtn" title="New text (Tab)" aria-label="Refresh text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="restartBtn" title="Restart (Esc)" aria-label="Restart test">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+
+    </nav>
+
+    <!-- ── STATS ROW ── -->
+    <div class="stats-row" role="status" aria-live="polite" aria-label="Live stats">
+      <div class="stat-card" id="statWpm">
+        <span class="stat-value" id="wpmVal">—</span>
+        <span class="stat-label">wpm</span>
+      </div>
+      <div class="stat-card" id="statAcc">
+        <span class="stat-value" id="accVal">—</span>
+        <span class="stat-label">accuracy</span>
+      </div>
+      <div class="stat-card stat-card--timer" id="statTime">
+        <span class="stat-value" id="timeVal">60</span>
+        <span class="stat-label">seconds</span>
+      </div>
+      <div class="stat-card" id="statChars">
+        <span class="stat-value" id="charsVal">0</span>
+        <span class="stat-label">chars</span>
+      </div>
+    </div>
+
+    <!-- ── PROGRESS BAR ── -->
+    <div class="progress-wrap" aria-label="Typing progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressWrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- ── TYPING AREA ── -->
+    <main class="typing-section" id="typingSection">
+
+      <!-- The prompt text — rendered as individual character spans -->
+      <div class="text-display" id="textDisplay" aria-label="Text to type" role="textbox" aria-multiline="true" aria-readonly="true">
+        <!-- JS fills this with <span> elements per character -->
+      </div>
+
+      <!-- Ghost input — captures keystrokes, kept off-screen -->
+      <input
+        type="text"
+        id="ghostInput"
+        class="ghost-input"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Type here"
+        aria-hidden="true"
+        tabindex="0"
+      />
+
+      <!-- Click-to-focus overlay (shown when test hasn't started) -->
+      <div class="focus-overlay" id="focusOverlay" aria-hidden="true">
+        <div class="focus-msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          <span>click here or press any key to begin</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ── MISTAKE FLASH ── (visual error feedback) -->
+    <div class="mistake-flash" id="mistakeFlash" aria-hidden="true"></div>
+
+    <!-- ── RESULTS OVERLAY ── -->
+    <div class="results-overlay" id="resultsOverlay" hidden aria-modal="true" role="dialog" aria-label="Test results">
+      <div class="results-card">
+        <h2 class="results-title">test complete</h2>
+
+        <div class="results-grid">
+          <div class="result-block result-block--hero">
+            <span class="result-val" id="finalWpm">0</span>
+            <span class="result-lbl">words per minute</span>
+          </div>
+          <div class="result-block">
+            <span class="result-val" id="finalAcc">0%</span>
+            <span class="result-lbl">accuracy</span>
+          </div>
+          <div class="result-block">
+            <span class="result-val" id="finalChars">0</span>
+            <span class="result-lbl">characters</span>
+          </div>
+          <div class="result-block">
+            <span class="result-val" id="finalErrors">0</span>
+            <span class="result-lbl">errors</span>
+          </div>
+          <div class="result-block">
+            <span class="result-val" id="finalTime">0s</span>
+            <span class="result-lbl">time</span>
+          </div>
+          <div class="result-block">
+            <span class="result-val" id="finalCorrect">0</span>
+            <span class="result-lbl">correct chars</span>
+          </div>
+        </div>
+
+        <!-- Personal best indicator -->
+        <div class="pb-badge" id="pbBadge" hidden>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          New Personal Best!
+        </div>
+
+        <div class="results-actions">
+          <button class="btn-primary" id="resultsRestartBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Try Again
+          </button>
+          <button class="btn-ghost" id="resultsNewTextBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            New Text
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <p>
+        <kbd>Tab</kbd> new text &nbsp;·&nbsp;
+        <kbd>Esc</kbd> restart &nbsp;·&nbsp;
+        <kbd>Enter</kbd> try again
+      </p>
+    </footer>
+
+  </div><!-- /.app-wrapper -->
+
+  <script src="script.js"></script>
+</body>
+</html>
