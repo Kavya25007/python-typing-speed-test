@@ -37,7 +37,7 @@ It computes:
 
 3. Run the file:
    python typing_gui.py
-
+   
 ---
 
 ## 🎯 Project Purpose
