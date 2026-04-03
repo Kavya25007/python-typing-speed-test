@@ -1,5 +1,4 @@
-# 🖥️ Python Typing Speed Test
-
+# 🖥️ Python Typing Speed Test  
 This is a simple Typing Speed Test application developed using Python and Tkinter.
 
 It computes:
